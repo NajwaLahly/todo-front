@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import TodoInput from './components/todoInput/TodoInput.js';
+import TodoList from './components/todoList/TodoList.js';
+import 'todomvc-app-css/index.css';
+import 'todomvc-common/base.css' ;
+// import './App.css'
 
 function App() {
+  const todos = []
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <section className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
+        <TodoInput />
+        <TodoList todos={todos}/>
       </header>
-    </div>
+  
+    </section>
   );
 }
 
