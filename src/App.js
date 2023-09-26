@@ -15,9 +15,9 @@ function App() {
   }
 
   const handleEnterPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && inputText !== '') {
       const nextTodos = todos.slice();
-      setTodos([...nextTodos, inputText]);
+      setTodos([...nextTodos, inputText.trim()]);
       setInputText('');
     }
   }

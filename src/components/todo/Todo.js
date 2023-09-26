@@ -1,5 +1,12 @@
 export default function Todo({todo}) {
     return (
-        <li>{todo}</li>
+        <li>
+            <div className="view">
+				<input className="toggle" type="checkbox" unchecked></input>
+				<label>{todo}</label>
+				<button className="destroy"></button>
+			</div>
+            
+        </li>
     )
 }
