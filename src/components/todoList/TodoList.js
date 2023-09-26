@@ -2,8 +2,8 @@ import Todo from "../todo/Todo"
 
 export default function TodoList({todos}) {
     return(
-        <ul>
-            {todos.map((todo) => <li><Todo todo={todo} /></li>)}
+        <ul className="todo-list">
+            {todos.map((todo) => <Todo todo={todo} />)}
         </ul>
     )
 }

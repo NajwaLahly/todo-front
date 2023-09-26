@@ -2,16 +2,31 @@ import TodoInput from './components/todoInput/TodoInput.js';
 import TodoList from './components/todoList/TodoList.js';
 import 'todomvc-app-css/index.css';
 import 'todomvc-common/base.css' ;
-// import './App.css'
+
+import {useState} from 'react'
 
 function App() {
-  const todos = []
+
+  const [inputText, setInputText] = useState('');
+  const [todos, setTodos] = useState([]);
+
+  const handleChange = (e) => {
+    setInputText(e.target.value)
+  }
+
+  const handleEnterPress = (e) => {
+    if (e.key === 'Enter') {
+      const nextTodos = todos.slice();
+      setTodos([...nextTodos, inputText]);
+      setInputText('');
+    }
+  }
 
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-        <TodoInput />
+        <TodoInput inputText={inputText} handleEnterPress={handleEnterPress} handleChange={handleChange}/>
         <TodoList todos={todos}/>
       </header>
   
