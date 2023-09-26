@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Todo({ todo }) {
+export default function Todo({ todo, todos, setTodos, key}) {
   const [isChecked, setIsChecked] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(todo);
@@ -8,6 +8,13 @@ export default function Todo({ todo }) {
   const doubleClickHandler = () => {
     setIsEditing(!isEditing);
   };
+
+  const handleBlur = () => {
+    setIsEditing(false);
+    console.log(key);
+    
+    setTodos(todos.map((todo, index) => index === key ? todo = inputText.trim() : null))
+  }
 
   //   useEffect(() => {
   //     console.log('edit ' + isEditing)
@@ -28,8 +35,7 @@ export default function Todo({ todo }) {
   //   }, [isEditing]);
 
   return (
-    <li
-      key=""
+    <li key={key}
       className={`${isChecked && "completed"} ${isEditing && "editing"}`}
     >
       <div className="view">
@@ -45,7 +51,7 @@ export default function Todo({ todo }) {
         <input
           className="edit"
           value={inputText}
-          onBlur={() => setIsEditing(false)}
+          onBlur={handleBlur}
           onChange={(e) => setInputText(e.target.value)}
           autoFocus
         ></input>
