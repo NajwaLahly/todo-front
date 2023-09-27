@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-export default function Todo({ value, id , handleEdit, handleDestroy}) {
+export default function Todo({ todo , handleEdit, handleDestroy}) {
   const [isChecked, setIsChecked] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [inputText, setInputText] = useState(value);
+  const [inputText, setInputText] = useState(todo.value);
 
   const doubleClickHandler = () => {
     setIsEditing(!isEditing);
@@ -11,7 +11,7 @@ export default function Todo({ value, id , handleEdit, handleDestroy}) {
 
   const handleBlur = () => {
     setIsEditing(false);
-    handleEdit({id:id, value: inputText})
+    handleEdit({id:todo.id, value: inputText})
   };
 
   const handleKeyPress = (e) => {
@@ -34,8 +34,8 @@ export default function Todo({ value, id , handleEdit, handleDestroy}) {
           type="checkbox"
           onChange={() => setIsChecked(!isChecked)}
         ></input>
-        <label onDoubleClick={doubleClickHandler} >{value}</label>
-        <button className="destroy" onClick={() => handleDestroy(id)}></button>
+        <label onDoubleClick={doubleClickHandler} >{todo.value}</label>
+        <button className="destroy" onClick={() => handleDestroy(todo.id)}></button>
       </div>
       {isEditing && (
         <input
