@@ -10,10 +10,13 @@ import Footer from "./components/footer/Footer.js";
 function App() {
   const [inputText, setInputText] = useState("");
   const [todos, setTodos] = useState([]);
+  const [displayMode, setDisplayMode] = useState("Active");
 
   const itemLeftCount = todos.filter((todo) => todo.completed === false).length;
 
-  console.log(itemLeftCount);
+  const active = todos.filter((todo) => todo.completed === false);
+
+  const completed = todos.filter((todo) => todo.completed === true);
 
   const handleChange = (e) => {
     setInputText(e.target.value);
@@ -30,7 +33,6 @@ function App() {
 
   const handleEdit = (nextTodo) => {
     const nextValue = nextTodo.value.trim();
-    console.log(nextValue);
     if (nextValue === "") {
       return destroy(nextTodo.id);
     }
@@ -70,11 +72,23 @@ function App() {
     });
   };
 
+  const filteredTodos = () => {
+    switch (displayMode) {
+      case "Active":
+        return active;
+      case "All":
+        return todos;
+      case "Completed":
+        return completed;
+      default:
+        return active;
+    }
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-        {console.log(todos)}
         <TodoInput
           inputText={inputText}
           handleEnterPress={handleEnterPress}
@@ -83,13 +97,18 @@ function App() {
       </header>
       <section className="main">
         <TodoList
-          todos={todos}
+          todos={filteredTodos()}
           handleEdit={handleEdit}
           handleDestroy={destroy}
           handleCheck={check}
         />
       </section>
-      <Footer itemLeftCount={itemLeftCount} />
+      <Footer
+        displayActive={() => {setDisplayMode("Active")}}
+        displayAll={() => setDisplayMode("All")}
+        displayCompleted={() => setDisplayMode("Completed")}
+        itemLeftCount={itemLeftCount}
+      />
     </section>
   );
 }

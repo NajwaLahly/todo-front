@@ -59,6 +59,7 @@ function TodoNormalDisplay({
           className="toggle"
           type="checkbox"
           onChange={() => handleCheck(todo.id)}
+          checked={todo.completed ? 'checked' : ''}
         ></input>
         <label onDoubleClick={handleDoubleClick}>{todo.value}</label>
         <button
