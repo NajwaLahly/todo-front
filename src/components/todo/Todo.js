@@ -14,6 +14,16 @@ export default function Todo({ value, id , handleEdit}) {
     handleEdit({id:id, value: inputText})
   };
 
+  const handleKeyPress = (e) => {
+    if(e.key === "Enter") {
+      handleBlur();
+    } 
+    if(e.key === "Escape") {
+      setIsEditing(false);
+    }
+  }
+
+
   return (
     <li
       className={`${isChecked && "completed"} ${isEditing && "editing"}`}
@@ -24,7 +34,7 @@ export default function Todo({ value, id , handleEdit}) {
           type="checkbox"
           onChange={() => setIsChecked(!isChecked)}
         ></input>
-        <label onDoubleClick={doubleClickHandler} >{inputText}</label>
+        <label onDoubleClick={doubleClickHandler} >{value}</label>
         <button className="destroy"></button>
       </div>
       {isEditing && (
@@ -32,7 +42,7 @@ export default function Todo({ value, id , handleEdit}) {
           className="edit"
           value={inputText}
           onBlur={handleBlur}
-          onKeyDown={(e) => e.key === "Enter" && handleBlur()}
+          onKeyDown={handleKeyPress}
           onChange={(e) => setInputText(e.target.value)}
           autoFocus
         ></input>
