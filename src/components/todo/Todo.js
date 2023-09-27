@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Todo({ value, id}) {
+export default function Todo({ value, id , handleEdit}) {
   const [isChecked, setIsChecked] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(value);
@@ -11,7 +11,10 @@ export default function Todo({ value, id}) {
 
   const handleBlur = () => {
     setIsEditing(false);
-  }
+    const nextTodo = {id:id, value: inputText}
+  
+    handleEdit(nextTodo)
+  };
 
   return (
     <li

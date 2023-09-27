@@ -24,6 +24,17 @@ function App() {
     }
   };
 
+  const handleEdit = (nextTodo) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (nextTodo.id === todo.id) {
+          return { ...todo, value: nextTodo.value };
+        }
+        return todo;
+      });
+    });
+  };
+
   return (
     <section className="todoapp">
       <header className="header">
@@ -34,7 +45,8 @@ function App() {
           handleChange={handleChange}
         />
       </header>
-      <TodoList todos={todos} />
+      {console.log(todos)}
+      <TodoList todos={todos} handleEdit={handleEdit}/>
     </section>
   );
 }
