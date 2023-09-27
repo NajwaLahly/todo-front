@@ -4,15 +4,11 @@ import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
 
 import { useState } from "react";
-
-const data = [
-  { id: 1, value: "todo1" },
-  { id: 2, value: "todo2" }
-];
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [inputText, setInputText] = useState("");
-  const [todos, setTodos] = useState(data);
+  const [todos, setTodos] = useState([]);
 
   const handleChange = (e) => {
     setInputText(e.target.value);
@@ -22,7 +18,8 @@ function App() {
     if (e.key === "Enter" && inputText !== "") {
       const nextTodos = todos.slice();
       const formattedInput = inputText.trim();
-      setTodos([...nextTodos, formattedInput]);
+      const id = uuidv4();
+      setTodos([...nextTodos, { id: id, value: formattedInput }]);
       setInputText("");
     }
   };
@@ -36,8 +33,8 @@ function App() {
           handleEnterPress={handleEnterPress}
           handleChange={handleChange}
         />
-        <TodoList todos={todos} setTodos={setTodos} />
       </header>
+      <TodoList todos={todos} />
     </section>
   );
 }

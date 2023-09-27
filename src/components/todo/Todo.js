@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-export default function Todo({ todo, todos, setTodos, key}) {
+export default function Todo({ value, id}) {
   const [isChecked, setIsChecked] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [inputText, setInputText] = useState(todo);
+  const [inputText, setInputText] = useState(value);
 
   const doubleClickHandler = () => {
     setIsEditing(!isEditing);
@@ -11,31 +11,10 @@ export default function Todo({ todo, todos, setTodos, key}) {
 
   const handleBlur = () => {
     setIsEditing(false);
-    console.log(key);
-    
-    setTodos(todos.map((todo, index) => index === key ? todo = inputText.trim() : null))
   }
 
-  //   useEffect(() => {
-  //     console.log('edit ' + isEditing)
-  //     console.log('click ' + isClicked)
-  //     const handleClickOutside = (e) => {
-  //       if (
-  //         inputRef.current &&
-  //         !inputRef.current.contains(e.target)
-  //       ) {
-  //         // setIsClicked(true);
-  //         alert('here')
-  //       }
-  //     };
-  //     document.addEventListener("click", handleClickOutside);
-  //     return () => {
-  //       document.removeEventListener("click", handleClickOutside);
-  //     };
-  //   }, [isEditing]);
-
   return (
-    <li key={key}
+    <li
       className={`${isChecked && "completed"} ${isEditing && "editing"}`}
     >
       <div className="view">
@@ -44,7 +23,7 @@ export default function Todo({ todo, todos, setTodos, key}) {
           type="checkbox"
           onChange={() => setIsChecked(!isChecked)}
         ></input>
-        <label onDoubleClick={doubleClickHandler} >{todo}</label>
+        <label onDoubleClick={doubleClickHandler} >{inputText}</label>
         <button className="destroy"></button>
       </div>
       {isEditing && (
