@@ -27,7 +27,7 @@ function App() {
     const nextValue = nextTodo.value.trim();
     console.log(nextValue);
     if (nextValue === "") {
-      return destroy(nextTodo);
+      return destroy(nextTodo.id);
     }
     edit(nextTodo);
   };
@@ -36,9 +36,9 @@ function App() {
     setTodos((prevTodos)=> [...prevTodos, { id: newTodo.id, value: newTodo.value }])
   }
 
-  const destroy = (todoTodestroy) => {
+  const destroy = (id) => {
     setTodos((prevTodos) =>
-      prevTodos.filter((todo) => todo.id !== todoTodestroy.id)
+      prevTodos.filter((todo) => todo.id !== id)
     );
   };
 
@@ -63,7 +63,7 @@ function App() {
           handleChange={handleChange}
         />
       </header>
-      <TodoList todos={todos} handleEdit={handleEdit} />
+      <TodoList todos={todos} handleEdit={handleEdit} handleDestroy={destroy}/>
     </section>
   );
 }

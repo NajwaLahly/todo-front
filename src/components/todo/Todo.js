@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Todo({ value, id , handleEdit}) {
+export default function Todo({ value, id , handleEdit, handleDestroy}) {
   const [isChecked, setIsChecked] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(value);
@@ -35,7 +35,7 @@ export default function Todo({ value, id , handleEdit}) {
           onChange={() => setIsChecked(!isChecked)}
         ></input>
         <label onDoubleClick={doubleClickHandler} >{value}</label>
-        <button className="destroy"></button>
+        <button className="destroy" onClick={() => handleDestroy(id)}></button>
       </div>
       {isEditing && (
         <input
