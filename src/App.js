@@ -18,7 +18,7 @@ function App() {
     const nextValue = inputText.trim();
     if (e.key === "Enter" && nextValue !== "") {
       const id = uuidv4();
-      add({id:id, value:nextValue})
+      add({ id: id, value: nextValue });
       setInputText("");
     }
   };
@@ -33,13 +33,14 @@ function App() {
   };
 
   const add = (newTodo) => {
-    setTodos((prevTodos)=> [...prevTodos, { id: newTodo.id, value: newTodo.value }])
-  }
+    setTodos((prevTodos) => [
+      ...prevTodos,
+      { id: newTodo.id, value: newTodo.value, completed: false },
+    ]);
+  };
 
   const destroy = (id) => {
-    setTodos((prevTodos) =>
-      prevTodos.filter((todo) => todo.id !== id)
-    );
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
   const edit = (newTodo) => {
@@ -51,19 +52,31 @@ function App() {
         return todo;
       });
     });
+  };
+
+  const check = (id) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (id === todo.id) {
+          return {...todo, completed: !todo.completed}
+        }
+        return todo;
+      })
+    } )
   }
 
   return (
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
+        {console.log(todos)}
         <TodoInput
           inputText={inputText}
           handleEnterPress={handleEnterPress}
           handleChange={handleChange}
         />
       </header>
-      <TodoList todos={todos} handleEdit={handleEdit} handleDestroy={destroy}/>
+      <TodoList todos={todos} handleEdit={handleEdit} handleDestroy={destroy} handleCheck={check}/>
     </section>
   );
 }

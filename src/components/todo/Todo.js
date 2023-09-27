@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-export default function Todo({ todo, handleEdit, handleDestroy }) {
-  const [isChecked, setIsChecked] = useState(false);
+export default function Todo({ todo, handleEdit, handleDestroy, handleCheck }) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(todo.value);
 
@@ -25,6 +24,7 @@ export default function Todo({ todo, handleEdit, handleDestroy }) {
 
   const handleChange = (e) => setInputText(e.target.value);
 
+
   return (
     <>
       {isEditing ? (
@@ -36,11 +36,10 @@ export default function Todo({ todo, handleEdit, handleDestroy }) {
         />
       ) : (
         <TodoNormalDisplay
-          isChecked={isChecked}
-          setIsChecked={setIsChecked}
           handleDoubleClick={handleDoubleClick}
           todo={todo}
           handleDestroy={handleDestroy}
+          handleCheck={handleCheck}
         />
       )}
     </>
@@ -48,19 +47,18 @@ export default function Todo({ todo, handleEdit, handleDestroy }) {
 }
 
 function TodoNormalDisplay({
-  isChecked,
-  setIsChecked,
   handleDoubleClick,
   todo,
   handleDestroy,
+  handleCheck
 }) {
   return (
-    <li className={`${isChecked && "completed"}`}>
+    <li className={`${todo.completed && "completed"}`}>
       <div className="view">
         <input
           className="toggle"
           type="checkbox"
-          onChange={() => setIsChecked(!isChecked)}
+          onChange={() => handleCheck(todo.id)}
         ></input>
         <label onDoubleClick={handleDoubleClick}>{todo.value}</label>
         <button
