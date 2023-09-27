@@ -5,10 +5,15 @@ import "todomvc-common/base.css";
 
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Footer from "./components/footer/Footer.js";
 
 function App() {
   const [inputText, setInputText] = useState("");
   const [todos, setTodos] = useState([]);
+
+  const itemLeftCount = todos.filter((todo) => todo.completed === false).length;
+
+  console.log(itemLeftCount);
 
   const handleChange = (e) => {
     setInputText(e.target.value);
@@ -58,12 +63,12 @@ function App() {
     setTodos((prevTodos) => {
       return prevTodos.map((todo) => {
         if (id === todo.id) {
-          return {...todo, completed: !todo.completed}
+          return { ...todo, completed: !todo.completed };
         }
         return todo;
-      })
-    } )
-  }
+      });
+    });
+  };
 
   return (
     <section className="todoapp">
@@ -76,7 +81,15 @@ function App() {
           handleChange={handleChange}
         />
       </header>
-      <TodoList todos={todos} handleEdit={handleEdit} handleDestroy={destroy} handleCheck={check}/>
+      <section className="main">
+        <TodoList
+          todos={todos}
+          handleEdit={handleEdit}
+          handleDestroy={destroy}
+          handleCheck={check}
+        />
+      </section>
+      <Footer itemLeftCount={itemLeftCount} />
     </section>
   );
 }
