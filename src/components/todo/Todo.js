@@ -11,9 +11,7 @@ export default function Todo({ value, id , handleEdit}) {
 
   const handleBlur = () => {
     setIsEditing(false);
-    const nextTodo = {id:id, value: inputText}
-  
-    handleEdit(nextTodo)
+    handleEdit({id:id, value: inputText})
   };
 
   return (
@@ -34,6 +32,7 @@ export default function Todo({ value, id , handleEdit}) {
           className="edit"
           value={inputText}
           onBlur={handleBlur}
+          onKeyDown={(e) => e.key === "Enter" && handleBlur()}
           onChange={(e) => setInputText(e.target.value)}
           autoFocus
         ></input>

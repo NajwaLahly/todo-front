@@ -45,7 +45,6 @@ function App() {
           handleChange={handleChange}
         />
       </header>
-      {console.log(todos)}
       <TodoList todos={todos} handleEdit={handleEdit}/>
     </section>
   );
