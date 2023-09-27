@@ -15,25 +15,43 @@ function App() {
   };
 
   const handleEnterPress = (e) => {
-    if (e.key === "Enter" && inputText !== "") {
-      const nextTodos = todos.slice();
-      const formattedInput = inputText.trim();
+    const nextValue = inputText.trim();
+    if (e.key === "Enter" && nextValue !== "") {
       const id = uuidv4();
-      setTodos([...nextTodos, { id: id, value: formattedInput }]);
+      add({id:id, value:nextValue})
       setInputText("");
     }
   };
 
   const handleEdit = (nextTodo) => {
+    const nextValue = nextTodo.value.trim();
+    console.log(nextValue);
+    if (nextValue === "") {
+      return destroy(nextTodo);
+    }
+    edit(nextTodo);
+  };
+
+  const add = (newTodo) => {
+    setTodos((prevTodos)=> [...prevTodos, { id: newTodo.id, value: newTodo.value }])
+  }
+
+  const destroy = (todoTodestroy) => {
+    setTodos((prevTodos) =>
+      prevTodos.filter((todo) => todo.id !== todoTodestroy.id)
+    );
+  };
+
+  const edit = (newTodo) => {
     setTodos((prevTodos) => {
       return prevTodos.map((todo) => {
-        if (nextTodo.id === todo.id) {
-          return { ...todo, value: nextTodo.value };
+        if (newTodo.id === todo.id) {
+          return { ...todo, value: newTodo.value };
         }
         return todo;
       });
     });
-  };
+  }
 
   return (
     <section className="todoapp">
@@ -45,7 +63,7 @@ function App() {
           handleChange={handleChange}
         />
       </header>
-      <TodoList todos={todos} handleEdit={handleEdit}/>
+      <TodoList todos={todos} handleEdit={handleEdit} />
     </section>
   );
 }
