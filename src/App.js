@@ -17,6 +17,7 @@ function App() {
   const active = todos.filter((todo) => todo.completed === false);
 
   const completed = todos.filter((todo) => todo.completed === true);
+  
 
   const handleChange = (e) => {
     setInputText(e.target.value);
@@ -72,6 +73,7 @@ function App() {
     });
   };
 
+
   const filteredTodos = () => {
     switch (displayMode) {
       case "Active":
@@ -84,6 +86,7 @@ function App() {
         return active;
     }
   };
+
 
   return (
     <section className="todoapp">
@@ -108,6 +111,8 @@ function App() {
         displayAll={() => setDisplayMode("All")}
         displayCompleted={() => setDisplayMode("Completed")}
         itemLeftCount={itemLeftCount}
+        clearCompleted={() => setTodos(active)}
+        completed={completed.length}
       />
     </section>
   );
