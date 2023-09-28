@@ -4,19 +4,24 @@ import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Footer from "./components/footer/Footer.js";
 
+
 function App() {
   const [inputText, setInputText] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')) || []);
 
   const itemLeftCount = todos.filter((todo) => todo.completed === false).length;
 
   const active = todos.filter((todo) => todo.completed === false);
 
   const completed = todos.filter((todo) => todo.completed === true);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos])
 
   const handleChange = (e) => {
     setInputText(e.target.value);
