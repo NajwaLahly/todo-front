@@ -72,6 +72,20 @@ function App() {
     });
   };
 
+  const markAllAsComplete = () => {
+    if(todos.length > completed.length) {
+      setTodos(todos.map(todo => {
+        if (todo.completed === false) {
+          return {...todo, completed:true}
+        }
+        return todo;
+      }))
+    } else {
+      setTodos(todos.map(todo => {return {...todo, completed: !todo.completed}}))
+    }
+    
+  }
+
   return (
     <BrowserRouter>
       <section className="todoapp">
@@ -84,6 +98,8 @@ function App() {
           />
         </header>
         <section className="main">
+        <input id="toggle-all" className="toggle-all" type="checkbox" onClick={markAllAsComplete}></input>
+				<label for="toggle-all">Mark all as complete</label>
           <Routes>
             <Route
               path="/active"
