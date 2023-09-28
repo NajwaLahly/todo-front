@@ -2,7 +2,7 @@ import TodoInput from "./components/todoInput/TodoInput.js";
 import TodoList from "./components/todoList/TodoList.js";
 import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
-import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";

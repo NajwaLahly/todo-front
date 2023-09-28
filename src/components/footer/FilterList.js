@@ -1,13 +1,33 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-export default function FilterList({ displayAll, displayActive, displayCompleted }){
-    
-    return (
-        <ul className="filters">
-            <li><Link to={'/'}>All</Link></li>
-            <li><Link to={'/active'}>Active</Link></li>
-            <li><Link to={'/completed'}>Completed</Link></li>
-        </ul>
-    )
+export default function FilterList() {
+    const selected = ({ isActive }) => isActive ? "selected" : "";
+  return (
+    <ul className="filters">
+      <li>
+        <NavLink
+          to={"/"}
+          className={selected}
+        >
+          All
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to={"/active"}
+          className={selected}
+        >
+          Active
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to={"/completed"}
+          className={selected}
+        >
+          Completed
+        </NavLink>
+      </li>
+    </ul>
+  );
 }
-
