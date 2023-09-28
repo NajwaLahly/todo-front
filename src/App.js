@@ -2,6 +2,7 @@ import TodoInput from "./components/todoInput/TodoInput.js";
 import TodoList from "./components/todoList/TodoList.js";
 import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
+import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -10,14 +11,12 @@ import Footer from "./components/footer/Footer.js";
 function App() {
   const [inputText, setInputText] = useState("");
   const [todos, setTodos] = useState([]);
-  const [displayMode, setDisplayMode] = useState("Active");
 
   const itemLeftCount = todos.filter((todo) => todo.completed === false).length;
 
   const active = todos.filter((todo) => todo.completed === false);
 
   const completed = todos.filter((todo) => todo.completed === true);
-  
 
   const handleChange = (e) => {
     setInputText(e.target.value);
@@ -73,49 +72,65 @@ function App() {
     });
   };
 
-
-  const filteredTodos = () => {
-    switch (displayMode) {
-      case "Active":
-        return active;
-      case "All":
-        return todos;
-      case "Completed":
-        return completed;
-      default:
-        return active;
-    }
-  };
-
-
   return (
-    <section className="todoapp">
-      <header className="header">
-        <h1>todos</h1>
-        <TodoInput
-          inputText={inputText}
-          handleEnterPress={handleEnterPress}
-          handleChange={handleChange}
-        />
-      </header>
-      <section className="main">
-        <TodoList
-          todos={filteredTodos()}
-          handleEdit={handleEdit}
-          handleDestroy={destroy}
-          handleCheck={check}
+    <BrowserRouter>
+      <section className="todoapp">
+        <header className="header">
+          <h1>todos</h1>
+          <TodoInput
+            inputText={inputText}
+            handleEnterPress={handleEnterPress}
+            handleChange={handleChange}
+          />
+        </header>
+        <section className="main">
+          <Routes>
+            <Route
+              path="/active"
+              element={
+                <TodoList
+                  todos={active}
+                  handleEdit={handleEdit}
+                  handleDestroy={destroy}
+                  handleCheck={check}
+                />
+              }
+            />
+
+            <Route
+              path="/completed"
+              element={
+                <TodoList
+                  todos={completed}
+                  handleEdit={handleEdit}
+                  handleDestroy={destroy}
+                  handleCheck={check}
+                />
+              }
+            />
+
+            <Route
+              path="/"
+              element={
+                <TodoList
+                  todos={todos}
+                  handleEdit={handleEdit}
+                  handleDestroy={destroy}
+                  handleCheck={check}
+                />
+              }
+            />
+          </Routes>
+        </section>
+        <Footer
+          itemLeftCount={itemLeftCount}
+          clearCompleted={() => setTodos(active)}
+          completed={completed.length}
         />
       </section>
-      <Footer
-        displayActive={() => {setDisplayMode("Active")}}
-        displayAll={() => setDisplayMode("All")}
-        displayCompleted={() => setDisplayMode("Completed")}
-        itemLeftCount={itemLeftCount}
-        clearCompleted={() => setTodos(active)}
-        completed={completed.length}
-      />
-    </section>
+    </BrowserRouter>
   );
+
 }
 
 export default App;
