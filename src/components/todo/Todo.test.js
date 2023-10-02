@@ -9,7 +9,7 @@ const mockedTodo = {
   completed: false,
 };
 describe("Todo component", () => {
-test("renders a todo label", () => {
+it("should render a todo label", () => {
   render(<Todo todo={{ id: 1, value: "todo-1" }} />);
 
   const labelElement = screen.getByLabelText("todo-1");
@@ -26,7 +26,7 @@ describe("action handlers", () =>{test("renders a todo destroy button", () => {
   expect(buttonElement).toHaveClass("destroy");
 });
 
-it("should renders a todo checkbox", () => {
+it("should render a todo checkbox", () => {
    const todo={ id: 1, value: "todo-1", completed: false }
    const {rerender} = render(<Todo todo={todo} />);
 
@@ -41,7 +41,7 @@ it("should renders a todo checkbox", () => {
 
 });
 
-test("check if handleCheck was invoked after click", async () => {
+it("should check if handleCheck was invoked after click", async () => {
   const mockedHandleChange = jest.fn();
 
   render(<Todo todo={mockedTodo} handleCheck={mockedHandleChange} />);
@@ -52,7 +52,7 @@ test("check if handleCheck was invoked after click", async () => {
   expect(mockedHandleChange).toHaveBeenCalledWith(mockedTodo.id);
 });
 
-test("check edit mode and show input", async () => {
+it("should check if edit mode shows input", async () => {
   const mockedHandleEdit = jest.fn();
   const mockedHandleCheck = jest.fn();
   const mockedHandleDestroy = jest.fn();
