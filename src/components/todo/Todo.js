@@ -86,6 +86,7 @@ export function TodoEditDisplay({
         onBlur={handleBlur}
         onKeyDown={handleKeyPress}
         onChange={handleChange}
+        data-testid="todo-edit"
         autoFocus
       ></input>
     </li>
