@@ -4,7 +4,7 @@ import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Footer from "./components/footer/Footer.js";
 
@@ -21,12 +21,9 @@ function App() {
   const [inputText, setInputText] = useState("");
   const [todos, setTodos] = useLocalStorage('todos', []);
 
-
-  const itemLeftCount = todos.filter((todo) => todo.completed === false).length;
-
-  const active = todos.filter((todo) => todo.completed === false);
-
-  const completed = todos.filter((todo) => todo.completed === true);
+  const completed = useMemo(() => todos.filter((todo) => todo.completed), [todos])
+  const active = useMemo(() => todos.filter((todo) => !todo.completed), [todos])
+  const itemLeftCount = active.length
 
   const handleChange = (e) => {
     setInputText(e.target.value);
@@ -34,16 +31,16 @@ function App() {
 
   const handleEnterPress = (e) => {
     const nextValue = inputText.trim();
-    if (e.key === "Enter" && nextValue !== "") {
+    if (e.key === "Enter" && nextValue) {
       const id = uuidv4();
-      add({ id: id, value: nextValue });
+      add({ id, value: nextValue });
       setInputText("");
     }
   };
 
   const handleEdit = (nextTodo) => {
     const nextValue = nextTodo.value.trim();
-    if (nextValue === "") {
+    if (!nextValue) {
       return destroy(nextTodo.id);
     }
     edit(nextTodo);
@@ -51,8 +48,8 @@ function App() {
 
   const add = (newTodo) => {
     setTodos((prevTodos) => [
-      ...prevTodos,
-      { id: newTodo.id, value: newTodo.value, completed: false },
+      { ...newTodo, completed: false },
+      ...prevTodos
     ]);
   };
 
@@ -85,15 +82,11 @@ function App() {
   const markAllAsComplete = () => {
     if(todos.length > completed.length) {
       setTodos(todos.map(todo => {
-        if (todo.completed === false) {
           return {...todo, completed:true}
-        }
-        return todo;
-      }))
+    }))
     } else {
-      setTodos(todos.map(todo => {return {...todo, completed: !todo.completed}}))
+      setTodos(todos.map(todo => {return {...todo, completed: false}}))
     }
-    
   }
 
   return (
@@ -109,7 +102,7 @@ function App() {
         </header>
         <section className="main">
         <input id="toggle-all" className="toggle-all" type="checkbox" onClick={markAllAsComplete}></input>
-				<label for="toggle-all">Mark all as complete</label>
+				<label htmlFor="toggle-all">Mark all as complete</label>
           <Routes>
             <Route
               path="/active"

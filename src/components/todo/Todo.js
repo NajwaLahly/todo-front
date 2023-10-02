@@ -46,7 +46,7 @@ export default function Todo({ todo, handleEdit, handleDestroy, handleCheck }) {
   );
 }
 
-function TodoNormalDisplay({
+export function TodoNormalDisplay({
   handleDoubleClick,
   todo,
   handleDestroy,
@@ -56,12 +56,13 @@ function TodoNormalDisplay({
     <li className={`${todo.completed && "completed"}`}>
       <div className="view">
         <input
+          id="toggle"
           className="toggle"
           type="checkbox"
           onChange={() => handleCheck(todo.id)}
-          checked={todo.completed ? 'checked' : ''}
+          checked={todo.completed}
         ></input>
-        <label onDoubleClick={handleDoubleClick}>{todo.value}</label>
+        <label htmlFor="toggle" onDoubleClick={handleDoubleClick}>{todo.value}</label>
         <button
           className="destroy"
           onClick={() => handleDestroy(todo.id)}
@@ -71,7 +72,7 @@ function TodoNormalDisplay({
   );
 }
 
-function TodoEditDisplay({
+export function TodoEditDisplay({
   inputText,
   handleBlur,
   handleKeyPress,
