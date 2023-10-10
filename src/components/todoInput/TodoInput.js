@@ -9,6 +9,7 @@ export default function TodoInput(props) {
       onChange={props.handleChange}
       onKeyDown={props.handleEnterPress}
       autoFocus
+      data-testid="todo-input"
       value={props.inputText}></input>
   );
 }
