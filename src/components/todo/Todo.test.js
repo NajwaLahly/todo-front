@@ -8,6 +8,7 @@ const mockedTodo = {
   value: "todo-1",
   completed: false,
 };
+
 describe("Todo component", () => {
 it("should render a todo label", () => {
   render(<Todo todo={{ id: 1, value: "todo-1" }} />);

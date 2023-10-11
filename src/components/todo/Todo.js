@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function Todo({ todo, handleEdit, handleDestroy, handleCheck }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [inputText, setInputText] = useState(todo.value);
+  const [inputText, setInputText] = useState(todo.title);
 
   const handleDoubleClick = () => {
     setIsEditing(!isEditing);
@@ -10,7 +10,7 @@ export default function Todo({ todo, handleEdit, handleDestroy, handleCheck }) {
 
   const handleBlur = () => {
     setIsEditing(false);
-    handleEdit({ id: todo.id, value: inputText });
+    handleEdit({ id: todo.id, title: inputText });
   };
 
   const handleKeyPress = (e) => {
@@ -62,7 +62,7 @@ export function TodoNormalDisplay({
           onChange={() => handleCheck(todo.id)}
           checked={todo.completed}
         ></input>
-        <label htmlFor="toggle" onDoubleClick={handleDoubleClick}>{todo.value}</label>
+        <label htmlFor="toggle" onDoubleClick={handleDoubleClick}>{todo.title}</label>
         <button
           className="destroy"
           onClick={() => handleDestroy(todo.id)}
