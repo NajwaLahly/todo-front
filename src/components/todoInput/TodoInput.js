@@ -1,27 +1,21 @@
 import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
 import { useState } from "react";
+import * as Api from "../../api/fetchers.js";
 
-export default function TodoInput(props) {
-
+export default function TodoInput({ addTodo }) {
   const [inputText, setInputText] = useState("");
-  const todosApiUrl = "http://localhost:8081/todos";
 
-
-  const add = (newTodo) => {
-    fetch(todosApiUrl, {
-      method: "POST",
-      body: JSON.stringify(newTodo),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => props.addTodo(data))
-      .catch((error) => console.log(error));
+  const add = async (newTodo) => {
+    try {
+      Api.add(newTodo)
+        .then((data) => addTodo(data))
+        .catch((e) => console.log(e));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  
   const handleEnterPress = (e) => {
     const nextTitle = inputText.trim();
     if (e.key === "Enter" && nextTitle) {
@@ -42,6 +36,7 @@ export default function TodoInput(props) {
       onKeyDown={handleEnterPress}
       autoFocus
       data-testid="todo-input"
-      value={inputText}></input>
+      value={inputText}
+    ></input>
   );
 }

@@ -1,31 +1,19 @@
-export default function TodoCompleteToggle({todos, completed, editTodo}) {
+import {edit} from "../../api/fetchers.js";
 
-    const todosApiUrl = "http://localhost:8081/todos";
+export default function TodoCompleteToggle({todos, completed, editTodo}) {
 
     const markAllAsComplete = () => {
         if (todos.length > completed.length) {
           todos.forEach((todo) => {
-            fetch(`${todosApiUrl}/${todo.id}`, {
-              method: "PUT",
-              body: JSON.stringify({ ...todo, completed: true }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-              .then((response) => response.json())
-              .then((data) => editTodo(data));
+            edit({...todo, completed: true})
+              .then((data) => editTodo(data))
+              .catch(e => console.log(e))
           });
         } else {
           todos.forEach((todo) => {
-            fetch(`${todosApiUrl}/${todo.id}`, {
-              method: "PUT",
-              body: JSON.stringify({ ...todo, completed: false }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-              .then((response) => response.json())
-              .then((data) => editTodo(data));
+            edit({...todo, completed: false})
+              .then((data) => editTodo(data))
+              .catch(e => console.log(e))
           });
         }
       };

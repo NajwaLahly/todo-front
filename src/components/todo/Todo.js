@@ -1,10 +1,10 @@
 import { useState } from "react";
+import * as Api from "../../api/fetchers.js";
+
 
 export default function Todo({ todo, checkTodo, editTodo, destroyTodo, findTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(todo.title);
-
-  const todosApiUrl = "http://localhost:8081/todos";
 
   const handleDoubleClick = () => {
     setIsEditing(!isEditing);
@@ -34,37 +34,23 @@ export default function Todo({ todo, checkTodo, editTodo, destroyTodo, findTodo 
     edit(nextTodo);
   };
 
-  const edit = (newTodo) => {
-    const id = newTodo.id;
-    fetch(`${todosApiUrl}/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(newTodo),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => editTodo(data))
-      .catch((error) => console.log(error));
+  const edit = (updatedTodo) => {
+    Api.edit(updatedTodo)
+      .then(data => editTodo(data))
+      .catch(e => console.log(e));
   };
 
   const destroy = (id) => {
-    fetch(`${todosApiUrl}/${id}`, { method: "DELETE" })
+    Api.destroy(id)
       .then(destroyTodo(id))
-      .catch((error) => console.log(error));
+      .catch(e => console.log(e));
   };
 
   const check = (id) => {
     var updatedTodo = findTodo(id);
     console.log(updatedTodo)
     updatedTodo = { ...updatedTodo, completed: !updatedTodo.completed };
-    fetch(`${todosApiUrl}/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(updatedTodo),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    Api.edit(updatedTodo)
       .then(checkTodo(id))
       .catch((error) => console.log(error));
   };

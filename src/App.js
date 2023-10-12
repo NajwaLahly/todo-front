@@ -7,17 +7,18 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import Footer from "./components/footer/Footer.js";
 import TodoCompleteToggle from "./components/todoInput/TodoCompleteToggle.js";
+import { getAll } from "./api/fetchers.js";
 
 function App() {
   const [todos, setTodos] = useState([]);
 
-  const todosApiUrl = "http://localhost:8081/todos";
-
   useEffect(() => {
-    fetch(todosApiUrl, { method: "GET" })
-      .then((response) => response.json())
-      .then((data) => setTodos(data))
-      .catch((error) => console.log(error));
+    const fetchData = async () => {
+      getAll()
+        .then((data) => setTodos(data))
+        .catch((e) => console.log(e));
+    };
+    fetchData();
   }, []);
 
   const completed = useMemo(
@@ -32,6 +33,7 @@ function App() {
   const itemLeftCount = active.length;
 
   const add = (todo) => {
+    console.log(todo);
     setTodos((prevTodos) => [todo, ...prevTodos]);
   };
 
@@ -122,7 +124,7 @@ function App() {
         <Footer
           itemLeftCount={itemLeftCount}
           destroyTodo={destroy}
-          completed={completed.length}
+          completed={completed}
         />
       </section>
     </BrowserRouter>
