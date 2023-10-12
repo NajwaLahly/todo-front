@@ -1,9 +1,25 @@
-import Todo from "../todo/Todo"
+import Todo from "../todo/Todo";
 
-export default function TodoList({todos, handleEdit, handleDestroy, handleCheck}) {
-    return(
-        <ul className="todo-list">
-            {todos.map((todo) => <Todo key={todo.id} todo={todo} handleEdit={handleEdit} handleDestroy={handleDestroy} handleCheck={handleCheck}/>)}
-        </ul>
-    )
+export default function TodoList({
+  todos,
+  checkTodo,
+  editTodo,
+  destroyTodo,
+  findTodo
+
+}) {
+  return (
+    <ul className="todo-list">
+      {todos.map((todo) => (
+        <Todo
+          key={todo.id}
+          todo={todo}
+          checkTodo={checkTodo}
+          editTodo={editTodo}
+          destroyTodo={destroyTodo}
+          findTodo={findTodo}
+        />
+      ))}
+    </ul>
+  );
 }

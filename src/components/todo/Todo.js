@@ -1,8 +1,10 @@
 import { useState } from "react";
 
-export default function Todo({ todo, handleEdit, handleDestroy, handleCheck }) {
+export default function Todo({ todo, checkTodo, editTodo, destroyTodo, findTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(todo.title);
+
+  const todosApiUrl = "http://localhost:8081/todos";
 
   const handleDoubleClick = () => {
     setIsEditing(!isEditing);
@@ -24,6 +26,48 @@ export default function Todo({ todo, handleEdit, handleDestroy, handleCheck }) {
 
   const handleChange = (e) => setInputText(e.target.value);
 
+  const handleEdit = (nextTodo) => {
+    const nextTitle = nextTodo.title.trim();
+    if (!nextTitle) {
+      return destroy(nextTodo.id);
+    }
+    edit(nextTodo);
+  };
+
+  const edit = (newTodo) => {
+    const id = newTodo.id;
+    fetch(`${todosApiUrl}/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(newTodo),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => editTodo(data))
+      .catch((error) => console.log(error));
+  };
+
+  const destroy = (id) => {
+    fetch(`${todosApiUrl}/${id}`, { method: "DELETE" })
+      .then(destroyTodo(id))
+      .catch((error) => console.log(error));
+  };
+
+  const check = (id) => {
+    var updatedTodo = findTodo(id);
+    console.log(updatedTodo)
+    updatedTodo = { ...updatedTodo, completed: !updatedTodo.completed };
+    fetch(`${todosApiUrl}/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(updatedTodo),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkTodo(id))
+      .catch((error) => console.log(error));
+  };
 
   return (
     <>
@@ -38,8 +82,8 @@ export default function Todo({ todo, handleEdit, handleDestroy, handleCheck }) {
         <TodoNormalDisplay
           handleDoubleClick={handleDoubleClick}
           todo={todo}
-          handleDestroy={handleDestroy}
-          handleCheck={handleCheck}
+          handleDestroy={destroy}
+          handleCheck={check}
         />
       )}
     </>
@@ -50,7 +94,7 @@ export function TodoNormalDisplay({
   handleDoubleClick,
   todo,
   handleDestroy,
-  handleCheck
+  handleCheck,
 }) {
   return (
     <li className={`${todo.completed && "completed"}`}>
@@ -62,7 +106,9 @@ export function TodoNormalDisplay({
           onChange={() => handleCheck(todo.id)}
           checked={todo.completed}
         ></input>
-        <label htmlFor="toggle" onDoubleClick={handleDoubleClick}>{todo.title}</label>
+        <label htmlFor="toggle" onDoubleClick={handleDoubleClick}>
+          {todo.title}
+        </label>
         <button
           className="destroy"
           onClick={() => handleDestroy(todo.id)}
