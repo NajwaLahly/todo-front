@@ -2,9 +2,12 @@ import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
 import { useState } from "react";
 import * as Api from "../../api/fetchers.js";
+import { useTodos } from "../../contexts/TodosContextProvider";
 
-export default function TodoInput({ addTodo }) {
+
+export default function TodoInput() {
   const [inputText, setInputText] = useState("");
+  const { addTodo } = useTodos();
 
   const add = async (newTodo) => {
     try {

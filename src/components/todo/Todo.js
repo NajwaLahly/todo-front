@@ -1,10 +1,12 @@
 import { useState } from "react";
 import * as Api from "../../api/fetchers.js";
+import { useTodos } from "../../contexts/TodosContextProvider";
 
-
-export default function Todo({ todo, checkTodo, editTodo, destroyTodo, findTodo }) {
+export default function Todo({todo}) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(todo.title);
+
+  const { checkTodo, editTodo, destroyTodo, findTodo} = useTodos();
 
   const handleDoubleClick = () => {
     setIsEditing(!isEditing);
@@ -36,19 +38,19 @@ export default function Todo({ todo, checkTodo, editTodo, destroyTodo, findTodo 
 
   const edit = (updatedTodo) => {
     Api.edit(updatedTodo)
-      .then(data => editTodo(data))
-      .catch(e => console.log(e));
+      .then((data) => editTodo(data))
+      .catch((e) => console.log(e));
   };
 
   const destroy = (id) => {
     Api.destroy(id)
       .then(destroyTodo(id))
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   };
 
   const check = (id) => {
     var updatedTodo = findTodo(id);
-    console.log(updatedTodo)
+    console.log(updatedTodo);
     updatedTodo = { ...updatedTodo, completed: !updatedTodo.completed };
     Api.edit(updatedTodo)
       .then(checkTodo(id))

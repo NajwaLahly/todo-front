@@ -4,130 +4,31 @@ import "todomvc-app-css/index.css";
 import "todomvc-common/base.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { useState, useEffect, useMemo } from "react";
 import Footer from "./components/footer/Footer.js";
 import TodoCompleteToggle from "./components/todoInput/TodoCompleteToggle.js";
-import { getAll } from "./api/fetchers.js";
+import TodosContextProvider from "./contexts/TodosContextProvider.js";
 
 function App() {
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      getAll()
-        .then((data) => setTodos(data))
-        .catch((e) => console.log(e));
-    };
-    fetchData();
-  }, []);
-
-  const completed = useMemo(
-    () => todos.filter((todo) => todo.completed),
-    [todos]
-  );
-  const active = useMemo(
-    () => todos.filter((todo) => !todo.completed),
-    [todos]
-  );
-
-  const itemLeftCount = active.length;
-
-  const add = (todo) => {
-    console.log(todo);
-    setTodos((prevTodos) => [todo, ...prevTodos]);
-  };
-
-  const destroy = (id) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  };
-
-  const edit = (targetTodo) => {
-    setTodos((prevTodos) => {
-      return prevTodos.map((todo) => {
-        if (targetTodo.id === todo.id) {
-          return targetTodo;
-        }
-        return todo;
-      });
-    });
-  };
-
-  const check = (id) => {
-    setTodos((prevTodos) => {
-      return prevTodos.map((todo) => {
-        if (id === todo.id) {
-          return { ...todo, completed: !todo.completed };
-        }
-        return todo;
-      });
-    });
-  };
-
-  const find = (id) => {
-    return todos.find((todo) => todo.id === id);
-  };
-
   return (
-    <BrowserRouter>
-      <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <TodoInput addTodo={add} />
-        </header>
-        <section className="main">
-          <TodoCompleteToggle
-            todos={todos}
-            completed={completed}
-            editTodo={edit}
-          />
-          <Routes>
-            <Route
-              path="/active"
-              element={
-                <TodoList
-                  todos={active}
-                  checkTodo={check}
-                  editTodo={edit}
-                  destroyTodo={destroy}
-                  findTodo={find}
-                />
-              }
-            />
-
-            <Route
-              path="/completed"
-              element={
-                <TodoList
-                  todos={completed}
-                  checkTodo={check}
-                  editTodo={edit}
-                  destroyTodo={destroy}
-                  findTodo={find}
-                />
-              }
-            />
-
-            <Route
-              path="/"
-              element={
-                <TodoList
-                  todos={todos}
-                  checkTodo={check}
-                  editTodo={edit}
-                  destroyTodo={destroy}
-                  findTodo={find}
-                />
-              }
-            />
-          </Routes>
+    <TodosContextProvider>
+      <BrowserRouter>
+        <section className="todoapp">
+          <header className="header">
+            <h1>todos</h1>
+            <TodoInput />
+          </header>
+          <section className="main">
+            <TodoCompleteToggle />
+            <Routes>
+              <Route path="/active" element={<TodoList />} />
+              <Route path="/completed" element={<TodoList />} />
+              <Route path="/" element={<TodoList />} />
+            </Routes>
+          </section>
+          <Footer />
         </section>
-        <Footer
-          itemLeftCount={itemLeftCount}
-          destroyTodo={destroy}
-          completed={completed}
-        />
-      </section>
-    </BrowserRouter>
+      </BrowserRouter>
+    </TodosContextProvider>
   );
 }
 

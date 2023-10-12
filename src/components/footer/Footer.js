@@ -1,24 +1,33 @@
 import FilterList from "./FilterList.js";
 import * as Api from "../../api/fetchers.js";
+import { useTodos } from "../../contexts/TodosContextProvider";
 
+export default function Footer() {
 
-export default function Footer({ itemLeftCount, completed, destroyTodo }) {
-
+  const { destroyTodo, completed, itemLeftCount } = useTodos();
+  
   const destroy = (id) => {
     Api.destroy(id)
       .then(destroyTodo(id))
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   };
 
   const clearCompleted = () => {
-    completed.forEach(todo => destroy(todo.id));
+    completed.forEach((todo) => destroy(todo.id));
   };
 
   return (
     <footer className="footer">
-      <span className="todo-count"><strong style={{ "fontWeight": "bold" }}>{itemLeftCount}</strong> {(itemLeftCount === 0 || itemLeftCount > 1) ? 'items' : 'item'} left</span>
+      <span className="todo-count">
+        <strong style={{ fontWeight: "bold" }}>{itemLeftCount}</strong>{" "}
+        {itemLeftCount === 0 || itemLeftCount > 1 ? "items" : "item"} left
+      </span>
       <FilterList />
-      {completed.length > 0 && <button className="clear-completed" onClick={clearCompleted}>Clear completed</button>}
+      {completed.length > 0 && (
+        <button className="clear-completed" onClick={clearCompleted}>
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 }
